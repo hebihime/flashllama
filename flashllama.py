@@ -3,6 +3,12 @@
 import argparse
 from pathlib import Path
 
+from llama_cpp import Llama
+
+from prompts import build_prompt
+
+MODEL_PATH = "models/7b-chat-q4_0.bin"
+
 
 def parse_notes(text: str) -> list[tuple[str, str]]:
     """Split markdown notes into (heading, body) sections."""
@@ -25,12 +31,18 @@ def parse_notes(text: str) -> list[tuple[str, str]]:
 def main():
     ap = argparse.ArgumentParser(description="turn markdown notes into flashcards")
     ap.add_argument("notes", help="markdown file of study notes")
+    ap.add_argument("-n", type=int, default=4, help="cards per section")
     args = ap.parse_args()
 
     sections = parse_notes(Path(args.notes).read_text())
-    print(f"found {len(sections)} sections:")
+    print(f"{len(sections)} sections, loading model (takes a moment)...")
+    llm = Llama(model_path=MODEL_PATH)
+
     for heading, body in sections:
-        print(f"  {heading} ({len(body)} chars)")
+        prompt = build_prompt(heading, body, n=args.n)
+        out = llm(prompt, max_tokens=256)
+        print(f"\n## {heading}")
+        print(out["choices"][0]["text"].strip())
 
 
 if __name__ == "__main__":
