@@ -1,10 +1,12 @@
 """flashllama — study notes in, flashcards out. all local, no api key."""
 
 import argparse
+import json
 from pathlib import Path
 
 from llama_cpp import Llama
 
+from extract import extract_cards
 from prompts import build_prompt
 
 MODEL_PATH = "models/7b-chat-q4_0.bin"
@@ -38,11 +40,20 @@ def main():
     print(f"{len(sections)} sections, loading model (takes a moment)...")
     llm = Llama(model_path=MODEL_PATH)
 
+    all_cards = []
     for heading, body in sections:
         prompt = build_prompt(heading, body, n=args.n)
         out = llm(prompt, max_tokens=256)
-        print(f"\n## {heading}")
-        print(out["choices"][0]["text"].strip())
+        cards = extract_cards(out["choices"][0]["text"])
+        for card in cards:
+            card["topic"] = heading
+        all_cards.extend(cards)
+        print(f"{heading}: {len(cards)} cards")
+
+    outfile = Path("out/cards.json")
+    outfile.parent.mkdir(exist_ok=True)
+    outfile.write_text(json.dumps(all_cards, indent=2))
+    print(f"\nwrote {len(all_cards)} cards to {outfile}")
 
 
 if __name__ == "__main__":

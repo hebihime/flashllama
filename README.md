@@ -18,7 +18,7 @@ the `models/` dir is gitignored for obvious reasons.
 
 ## run
 
-    python flashllama.py
+    python flashllama.py examples/photosynthesis.md
 
-right now it just proves the model loads and can answer a question.
-flashcards next.
+cards land in `out/cards.json`, one q/a pair per card, a few cards
+per markdown heading.

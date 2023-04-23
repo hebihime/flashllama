@@ -6,7 +6,7 @@ completes the request.
 
 ### Instruction:
 Write {n} question and answer flashcards for the study notes below.
-Put one card per line, in the form: Q: question | A: answer
+Respond with a JSON array where each card is {{"q": "...", "a": "..."}}.
 
 ### Input:
 Notes on {topic}:
