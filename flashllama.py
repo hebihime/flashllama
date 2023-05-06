@@ -10,6 +10,9 @@ from extract import extract_cards
 from prompts import build_prompt
 
 MODEL_PATH = "models/7b-chat-q4_0.bin"
+# a token is roughly 4 chars of english; keep prompt + answer inside n_ctx
+N_CTX = 2048
+MAX_SECTION_CHARS = 4000
 
 
 def parse_notes(text: str) -> list[tuple[str, str]]:
@@ -38,10 +41,13 @@ def main():
 
     sections = parse_notes(Path(args.notes).read_text())
     print(f"{len(sections)} sections, loading model (takes a moment)...")
-    llm = Llama(model_path=MODEL_PATH)
+    llm = Llama(model_path=MODEL_PATH, n_ctx=N_CTX)
 
     all_cards = []
     for heading, body in sections:
+        if len(body) > MAX_SECTION_CHARS:
+            print(f"({heading} is long, trimming to {MAX_SECTION_CHARS} chars)")
+            body = body[:MAX_SECTION_CHARS]
         prompt = build_prompt(heading, body, n=args.n)
         out = llm(prompt, max_tokens=256)
         cards = extract_cards(out["choices"][0]["text"])
