@@ -49,7 +49,7 @@ def main():
             print(f"({heading} is long, trimming to {MAX_SECTION_CHARS} chars)")
             body = body[:MAX_SECTION_CHARS]
         prompt = build_prompt(heading, body, n=args.n)
-        out = llm(prompt, max_tokens=256)
+        out = llm(prompt, max_tokens=512)
         cards = extract_cards(out["choices"][0]["text"])
         for card in cards:
             card["topic"] = heading
