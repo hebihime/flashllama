@@ -1,6 +1,7 @@
 """flashllama — study notes in, flashcards out. all local, no api key."""
 
 import argparse
+import csv
 import json
 from pathlib import Path
 
@@ -37,6 +38,8 @@ def main():
     ap = argparse.ArgumentParser(description="turn markdown notes into flashcards")
     ap.add_argument("notes", help="markdown file of study notes")
     ap.add_argument("-n", type=int, default=4, help="cards per section")
+    ap.add_argument("--csv", action="store_true",
+                    help="also write out/cards.csv (anki likes csv)")
     args = ap.parse_args()
 
     sections = parse_notes(Path(args.notes).read_text())
@@ -60,6 +63,14 @@ def main():
     outfile.parent.mkdir(exist_ok=True)
     outfile.write_text(json.dumps(all_cards, indent=2))
     print(f"\nwrote {len(all_cards)} cards to {outfile}")
+
+    if args.csv:
+        csvfile = Path("out/cards.csv")
+        with csvfile.open("w", newline="") as f:
+            writer = csv.writer(f)
+            for card in all_cards:
+                writer.writerow([card["q"], card["a"]])
+        print(f"wrote {csvfile} too (anki import: front, back)")
 
 
 if __name__ == "__main__":
