@@ -7,6 +7,8 @@ completes the request.
 ### Instruction:
 Write {n} question and answer flashcards for the study notes below.
 Respond with a JSON array where each card is {{"q": "...", "a": "..."}}.
+Return ONLY the JSON array. Do not add commentary, notes, or extra
+questions of your own.
 
 ### Input:
 Notes on {topic}:
@@ -15,6 +17,9 @@ Notes on {topic}:
 
 ### Response:
 """
+
+# things the model says when it is done and should stop talking
+STOP = ["###", "\n\n\n"]
 
 
 def build_prompt(topic: str, notes: str, n: int = 4) -> str:

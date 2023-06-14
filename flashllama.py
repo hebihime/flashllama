@@ -8,7 +8,7 @@ from pathlib import Path
 from llama_cpp import Llama
 
 from extract import extract_cards
-from prompts import build_prompt
+from prompts import STOP, build_prompt
 
 MODEL_PATH = "models/7b-chat-q4_0.bin"
 # a token is roughly 4 chars of english; keep prompt + answer inside n_ctx
@@ -52,7 +52,7 @@ def main():
             print(f"({heading} is long, trimming to {MAX_SECTION_CHARS} chars)")
             body = body[:MAX_SECTION_CHARS]
         prompt = build_prompt(heading, body, n=args.n)
-        out = llm(prompt, max_tokens=512)
+        out = llm(prompt, max_tokens=512, stop=STOP, temperature=0.4)
         cards = extract_cards(out["choices"][0]["text"])
         for card in cards:
             card["topic"] = heading
