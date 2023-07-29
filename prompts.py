@@ -1,5 +1,18 @@
 """Prompt templates. This file gets edited more than anything else here."""
 
+# llama-2-chat wants its own format: [INST] blocks and a <<SYS>> preamble.
+LLAMA2_CHAT = """[INST] <<SYS>>
+You write study flashcards. You always respond with a JSON array where
+each card is {{"q": "...", "a": "..."}}. You never add commentary or
+extra questions of your own.
+<</SYS>>
+
+Write {n} question and answer flashcards for these notes on {topic}:
+
+{notes} [/INST]
+"""
+
+# the old alpaca-style template, kept around for pre-llama-2 models
 ALPACA = """Below is an instruction that describes a task, paired with an input
 that provides further context. Write a response that appropriately
 completes the request.
@@ -18,9 +31,8 @@ Notes on {topic}:
 ### Response:
 """
 
-# things the model says when it is done and should stop talking
-STOP = ["###", "\n\n\n"]
+STOP = ["</s>", "[INST]"]
 
 
 def build_prompt(topic: str, notes: str, n: int = 4) -> str:
-    return ALPACA.format(topic=topic, notes=notes, n=n)
+    return LLAMA2_CHAT.format(topic=topic, notes=notes, n=n)

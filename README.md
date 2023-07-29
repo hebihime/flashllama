@@ -11,10 +11,10 @@ works now.
     source .venv/bin/activate
     pip install -r requirements.txt
 
-then get a model: any LLaMA-family 7B chat model quantized to GGML
-q4_0 format works. search Hugging Face for "7b ggml q4_0", download
-the `.bin` (about 4 GB) and save it as `models/7b-chat-q4_0.bin`.
-the `models/` dir is gitignored for obvious reasons.
+then get a model: I use llama-2-7b-chat quantized to GGML q4_0.
+grab a q4_0 `.bin` of it from Hugging Face (about 4 GB) and save it
+as `models/llama-2-7b-chat.q4_0.bin`. the `models/` dir is
+gitignored for obvious reasons.
 
 ## run
 

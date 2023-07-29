@@ -10,7 +10,7 @@ from llama_cpp import Llama
 from extract import extract_cards
 from prompts import STOP, build_prompt
 
-MODEL_PATH = "models/7b-chat-q4_0.bin"
+MODEL_PATH = "models/llama-2-7b-chat.q4_0.bin"
 # a token is roughly 4 chars of english; keep prompt + answer inside n_ctx
 N_CTX = 2048
 MAX_SECTION_CHARS = 4000
