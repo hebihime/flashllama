@@ -36,5 +36,5 @@ same notes, same prompt, same laptop (see `bench.py`):
 | quant | size   | speed     | cards any good?             |
 |-------|--------|-----------|-----------------------------|
 | q4_0  | 3.8 GB | 8.9 tok/s | yes, occasionally weird     |
-| q5_1  | 5.1 GB | 8.9 tok/s | a bit better than q4_0      |
+| q5_1  | 5.1 GB | 6.7 tok/s | a bit better than q4_0      |
 | q8_0  | 7.2 GB | 4.1 tok/s | best, but the fan takes off |
