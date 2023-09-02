@@ -16,6 +16,10 @@ grab a q4_0 `.bin` of it from Hugging Face (about 4 GB) and save it
 as `models/llama-2-7b-chat.q4_0.bin`. the `models/` dir is
 gitignored for obvious reasons.
 
+note: `llama-cpp-python` is pinned to 0.1.78 on purpose — 0.1.79
+moved to the new gguf model format and refuses ggml files.
+converting my model is a problem for a future weekend.
+
 ## run
 
     python flashllama.py examples/photosynthesis.md
