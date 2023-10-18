@@ -4,6 +4,7 @@ import json
 import re
 
 ARRAY_RE = re.compile(r"\[.*\]", re.DOTALL)
+TRAILING_COMMA_RE = re.compile(r",\s*([\]}])")
 
 
 def extract_cards(text: str) -> list[dict]:
@@ -16,4 +17,8 @@ def extract_cards(text: str) -> list[dict]:
     match = ARRAY_RE.search(text)
     if match is None:
         raise ValueError(f"no JSON array in model output: {text[:80]!r}")
-    return json.loads(match.group(0))
+    blob = match.group(0)
+    # the model is very fond of a trailing comma before ] — fine by it,
+    # not fine by json.loads
+    blob = TRAILING_COMMA_RE.sub(r"\1", blob)
+    return json.loads(blob)
